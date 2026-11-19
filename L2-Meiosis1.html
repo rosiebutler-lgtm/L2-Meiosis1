@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L2 Meiosis: one cell, four unique gametes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Shantell+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fff6ea; --paper2:#fff0e2; --ink:#3a1c28; --ink2:#6b4250;
+  --card:rgba(255,251,245,.8); --line:rgba(190,90,100,.28);
+  --pink:#e8558a; --orange:#f28a2e; --yellow:#f6c445;
+  --rose:#fcc9db; --peach:#ffd2ad; --butter:#ffeaa0;
+  --w1:rgba(240,105,150,.30); --w2:rgba(250,150,55,.28); --w3:rgba(250,205,70,.34);
+  --good:#1d7f53; --bad:#c2334a; --goodbg:#e2f6ea; --badbg:#fde3e7;
+  --btn:#d9467d; --btnInk:#fff; --grain:.55;
+  --shadow:0 14px 34px -16px rgba(220,80,120,.45);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#23121b; --paper2:#2f1824; --ink:#fbeee6; --ink2:#e7c4cd;
+    --card:rgba(56,28,41,.84); --line:rgba(255,180,170,.22);
+    --rose:#6a2747; --peach:#6b3a1f; --butter:#5c4a1c;
+    --w1:rgba(232,85,138,.22); --w2:rgba(242,138,46,.18); --w3:rgba(246,196,69,.14);
+    --good:#72d9a6; --bad:#ff8fa0; --goodbg:rgba(60,170,115,.18); --badbg:rgba(230,70,95,.2);
+    --btn:#f37aa5; --btnInk:#2a0f1a; --grain:.25;
+    --shadow:0 14px 34px -16px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#23121b; --paper2:#2f1824; --ink:#fbeee6; --ink2:#e7c4cd;
+  --card:rgba(56,28,41,.84); --line:rgba(255,180,170,.22);
+  --rose:#6a2747; --peach:#6b3a1f; --butter:#5c4a1c;
+  --w1:rgba(232,85,138,.22); --w2:rgba(242,138,46,.18); --w3:rgba(246,196,69,.14);
+  --good:#72d9a6; --bad:#ff8fa0; --goodbg:rgba(60,170,115,.18); --badbg:rgba(230,70,95,.2);
+  --btn:#f37aa5; --btnInk:#2a0f1a; --grain:.25;
+  --shadow:0 14px 34px -16px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.62 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+  radial-gradient(42vmax 30vmax at 6% 4%,var(--w1),transparent 70%),
+  radial-gradient(36vmax 28vmax at 96% 18%,var(--w3),transparent 70%),
+  radial-gradient(46vmax 32vmax at 72% 98%,var(--w2),transparent 70%),
+  radial-gradient(30vmax 26vmax at 4% 78%,var(--w3),transparent 70%),
+  radial-gradient(26vmax 20vmax at 50% 50%,var(--w1),transparent 70%)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:var(--grain);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .3 0 0 0 0 .25 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+img,svg{max-width:100%}
+a{color:inherit;text-decoration-color:var(--pink);text-decoration-thickness:2px;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1120px,100% - 2.5rem);margin-inline:auto}
+h1,h2,h3{font-family:"Shantell Sans","Segoe Print","Bradley Hand",system-ui,sans-serif;line-height:1.1;margin:0 0 .6rem}
+h1{font-size:clamp(2.5rem,6.4vw,4.6rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(1.8rem,3.6vw,2.5rem);font-weight:800;position:relative;display:inline-block;padding:0 .15em}
+h2::before{content:"";position:absolute;left:-.35em;right:-.5em;top:.38em;bottom:-.02em;z-index:-1;background:var(--swash,var(--rose));
+  border-radius:42% 58% 55% 45%/60% 42% 58% 40%;filter:url(#wobble);opacity:.85}
+h3{font-size:1.25rem;font-weight:700}
+p{margin:0 0 .9rem}
+.lede{font-size:1.15rem;max-width:58ch;color:var(--ink2)}
+.measure{max-width:66ch}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:2rem;align-items:center;padding:3.2rem 0 1.5rem}
+.hero .kick{font-family:"Shantell Sans",system-ui,sans-serif;font-weight:700;color:var(--pink);margin-bottom:.4rem}
+.hero-art{background:var(--card);border-radius:44% 56% 48% 52%/46% 50% 50% 54%;padding:1.2rem 1.4rem;box-shadow:var(--shadow)}
+.hero-art .cap{display:flex;justify-content:space-between;font-family:"Shantell Sans",sans-serif;font-weight:700;font-size:.95rem;color:var(--ink2);padding:0 .6rem}
+.jump{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;padding:0;margin:1.4rem 0 0}
+.jump a{display:inline-block;padding:.35rem .85rem;border-radius:999px;background:var(--card);border:1.5px solid var(--line);text-decoration:none;font-weight:700;font-size:.95rem}
+.jump a:hover{background:var(--butter)}
+.repo-pill{background:var(--yellow)!important;color:#3a1c28!important;border-color:transparent!important}
+
+/* sections */
+.sec{margin:4.2rem 0;isolation:isolate}
+.sec.pk{--swash:var(--rose)} .sec.or{--swash:var(--peach)} .sec.yl{--swash:var(--butter)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:28px 36px 24px 32px/32px 24px 36px 28px;padding:clamp(1rem,3vw,1.8rem);box-shadow:var(--shadow)}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:1.6rem;align-items:start}
+@media (max-width:840px){.split,.hero,.viewer{grid-template-columns:1fr!important}}
+.legend{display:flex;flex-wrap:wrap;gap:1rem;margin:.6rem 0 0;font-weight:700}
+.sw{display:inline-block;width:1.1rem;height:1.1rem;border-radius:40% 60% 50% 50%;vertical-align:-.15rem;margin-right:.35rem}
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin:1.2rem 0 0}
+.term{padding:1rem 1.1rem;border-radius:22px 28px 20px 26px;background:var(--paper2);border:1px solid var(--line)}
+.term dt{font-family:"Shantell Sans",sans-serif;font-weight:700;font-size:1.08rem;margin-bottom:.2rem}
+.term dd{margin:0;color:var(--ink2)}
+
+/* buttons */
+.btn{font:700 1rem "Atkinson Hyperlegible",system-ui,sans-serif;border:0;padding:.62rem 1.2rem;border-radius:999px;background:var(--btn);color:var(--btnInk);cursor:pointer;box-shadow:0 4px 0 rgba(150,35,75,.35);transition:transform .1s}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(150,35,75,.35)}
+.btn.alt{background:var(--orange);color:#2a0f0a;box-shadow:0 4px 0 rgba(160,80,20,.4)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin:.8rem 0}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:999px;padding:3px;background:var(--paper2)}
+.seg button{font:700 1rem "Atkinson Hyperlegible",sans-serif;border:0;background:transparent;color:var(--ink);padding:.4rem .95rem;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--yellow);color:#3a1c28}
+.fb{min-height:1.6em;font-weight:700;margin:.4rem 0 0}
+.fb.good{color:var(--good)} .fb.bad{color:var(--bad)}
+.tag{display:inline-block;padding:.22rem .75rem;border-radius:999px;background:var(--butter);font-weight:700;font-size:.92rem;margin-bottom:.6rem}
+.note{padding:.9rem 1.1rem;border-radius:20px 26px 18px 24px;background:var(--paper2);border:1.5px dashed var(--line);margin-top:1rem}
+.big{font-family:"Shantell Sans",sans-serif;font-weight:800;font-size:1.6rem;color:var(--pink)}
+
+/* svg styles */
+.al{font:700 10px "Atkinson Hyperlegible",sans-serif;fill:#3a1c28}
+.lbl{font:700 12px "Atkinson Hyperlegible",sans-serif;fill:var(--ink2)}
+.lbl.rec{fill:var(--pink)}
+.fibre{stroke:#c98b4a;stroke-width:1.1;opacity:.6}
+.pole{fill:#f6c445;stroke:#d98a1f;stroke-width:1.5}
+.equator{stroke:#e8558a;stroke-width:1.6;stroke-dasharray:5 5;opacity:.8}
+.nucleus{fill:rgba(255,255,255,.45);stroke:#e889a8;stroke-width:1.6}
+.nucleus.dash{fill:rgba(255,255,255,.2);stroke-dasharray:6 6}
+.chromatin{fill:none;stroke-width:2.6;stroke-linecap:round;opacity:.85}
+.cutline{stroke:#f6c445;stroke-width:2;stroke-dasharray:6 4}
+.chiasma{stroke:#f6c445;stroke-width:5;stroke-linecap:round;fill:none}
+.stage-svg{display:block;width:100%;height:auto}
+.pair{cursor:pointer;transform-box:fill-box;transform-origin:center}
+.pair-hit{fill:transparent;stroke:transparent;stroke-width:2;stroke-dasharray:5 4}
+.pair:hover .pair-hit,.pair:focus .pair-hit{stroke:#e8558a;fill:rgba(255,255,255,.25)}
+.pair:focus{outline:none}
+.pair.flipped{animation:flip .5s ease-out}
+@keyframes flip{from{transform:scaleX(-1)}to{transform:scaleX(1)}}
+.hit{cursor:crosshair}
+.pop{animation:pop .35s ease-out}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+
+/* viewer */
+.viewer{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:1.6rem;align-items:center}
+.viewer-img{background:var(--paper2);border-radius:30px 24px 34px 26px;padding:.6rem;border:1px solid var(--line)}
+.vnum{font-weight:700;color:var(--ink2);margin-bottom:.2rem}
+.thumbs{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 0}
+.thumb{width:2.3rem;height:2.3rem;border-radius:50%;border:2px solid var(--line);background:var(--paper2);color:var(--ink);font:700 .95rem "Atkinson Hyperlegible",sans-serif;cursor:pointer}
+.thumb[aria-current="true"]{background:var(--pink);color:#fff;border-color:var(--pink)}
+
+/* sorters */
+.sort-list{list-style:none;padding:0;margin:1.1rem 0;display:grid;gap:.8rem}
+.sort-list.img{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.sort-card{position:relative;background:var(--paper2);border:2px solid var(--line);border-radius:18px 24px 16px 22px;padding:.5rem;cursor:grab;user-select:none;-webkit-user-select:none;transition:transform .15s,border-color .15s}
+.sort-card:hover{border-color:var(--orange)}
+.sort-card.sel{border-color:var(--pink);box-shadow:0 0 0 4px rgba(232,85,138,.28);transform:translateY(-3px)}
+.sort-card.ok{border-color:var(--good);background:var(--goodbg)}
+.sort-card.no{border-color:var(--bad);background:var(--badbg)}
+.sort-card.over{border-style:dashed;border-color:var(--pink)}
+.pos{position:absolute;top:.45rem;left:.5rem;width:1.75rem;height:1.75rem;border-radius:50%;background:var(--yellow);color:#3a1c28;font-weight:700;display:grid;place-items:center;font-size:.92rem;z-index:1}
+.sort-card .nm{display:block;text-align:center;font-weight:700;font-size:.95rem;min-height:1.4em}
+.sort-list.txt .sort-card{padding:.75rem 1rem .75rem 3rem;display:flex;align-items:center;min-height:3.4rem}
+.sort-list.txt .pos{top:50%;transform:translateY(-50%)}
+.sort-list.txt p{margin:0}
+
+/* gametes & combos */
+.gam{display:inline-flex;align-items:center;gap:.3rem;padding:.35rem .7rem .35rem .4rem;border-radius:999px;background:var(--paper2);border:1.5px solid var(--line);font-weight:700}
+.b{width:1.85rem;height:1.85rem;border-radius:50%;display:inline-grid;place-items:center;font-weight:700;font-size:1rem}
+.b.m{background:#c93a6e;color:#fff}
+.b.p{background:#f39233;color:#2a0f0a}
+.combos{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0}
+.combo{opacity:.3;filter:grayscale(1);transition:opacity .3s,filter .3s}
+.combo.lit{opacity:1;filter:none}
+.bars{display:grid;gap:.9rem;margin-top:.8rem}
+.bar{height:1.5rem;background:var(--paper2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow),var(--orange),var(--pink));border-radius:999px;transition:width .9s ease-out}
+.range{width:100%;accent-color:#e8558a}
+
+/* table */
+.tbl{overflow-x:auto;margin-top:1rem}
+table{border-collapse:collapse;width:100%;min-width:680px}
+th,td{padding:.85rem .8rem;text-align:left;vertical-align:top;border-bottom:1.5px dashed var(--line)}
+th{font-family:"Shantell Sans",sans-serif;font-size:1.02rem}
+tbody th{color:var(--pink)}
+
+/* quiz */
+.q{padding:1.1rem 0;border-bottom:1.5px dashed var(--line)}
+.q:last-child{border-bottom:0}
+.q h3{font-size:1.1rem}
+.opts{display:grid;gap:.55rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.opt{text-align:left;padding:.7rem .95rem;border-radius:16px 20px 14px 18px;border:2px solid var(--line);background:var(--paper2);color:var(--ink);font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--orange)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:var(--goodbg)}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}
+.why{margin:.6rem 0 0;color:var(--ink2)}
+.score{position:relative;font-family:"Shantell Sans",sans-serif;font-weight:800;font-size:1.3rem}
+
+footer{margin:4rem 0 2.5rem;padding-top:1.5rem;border-top:2px dashed var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;color:var(--ink2)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="cellFill" cx="45%" cy="40%" r="68%">
+      <stop offset="0" stop-color="#fff7d9"/><stop offset=".55" stop-color="#ffe2c4"/><stop offset="1" stop-color="#fcc6d4"/>
+    </radialGradient>
+    <filter id="wobble" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="7" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <p class="kick">Year 12 Biology: genetic variation</p>
+      <h1>Meiosis: one cell, four unique gametes</h1>
+      <p class="lede">Meiosis halves the chromosome number and shuffles alleles, so every egg or sperm is genetically different. Learn the stages, put them in order, then play with segregation, independent assortment and crossing over to see where that variation comes from.</p>
+      <ul class="jump">
+        <li><a href="#stages">Stages</a></li>
+        <li><a href="#order">Order the stages</a></li>
+        <li><a href="#segregation">Segregation</a></li>
+        <li><a href="#assortment">Independent assortment</a></li>
+        <li><a href="#crossing">Crossing over</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+      </ul>
+    </div>
+    <figure class="hero-art" style="margin:0">
+      <svg id="heroSvg" viewBox="0 0 520 190" class="stage-svg" role="img" aria-label="One diploid cell dividing into four genetically different haploid gametes"></svg>
+      <figcaption class="cap"><span>1 diploid cell (2n)</span><span>4 unique haploid gametes (n)</span></figcaption>
+    </figure>
+  </header>
+
+  <!-- KEY TERMS -->
+  <section class="sec yl" id="terms">
+    <h2>Before you start</h2>
+    <p class="measure">Every picture on this page uses the same colours. Pink chromosomes came from the mother, orange chromosomes came from the father. Watch how the colours get mixed up as meiosis goes on.</p>
+    <div class="legend"><span><i class="sw" style="background:#e2457f"></i>Maternal chromosome</span><span><i class="sw" style="background:#f08a24"></i>Paternal chromosome</span><span><i class="sw" style="background:#fff1b8;border:1px solid #a77"></i>Centromere</span></div>
+    <dl class="terms">
+      <div class="term"><dt>Homologous chromosomes</dt><dd>A matching pair, one from each parent. Same genes at the same loci, but possibly different alleles.</dd></div>
+      <div class="term"><dt>Allele</dt><dd>A version of a gene, such as A or a.</dd></div>
+      <div class="term"><dt>Sister chromatids</dt><dd>Two identical copies of a chromosome, made in DNA replication and joined at the centromere.</dd></div>
+      <div class="term"><dt>Diploid (2n) and haploid (n)</dt><dd>Diploid cells have two sets of chromosomes. Haploid cells, like gametes, have one set.</dd></div>
+      <div class="term"><dt>Chiasma</dt><dd>The point where non-sister chromatids cross and swap DNA. Plural: chiasmata.</dd></div>
+      <div class="term"><dt>Gamete</dt><dd>A haploid sex cell: an egg or a sperm.</dd></div>
+    </dl>
+  </section>
+
+  <!-- STAGE VIEWER -->
+  <section class="sec pk" id="stages">
+    <h2>Step through meiosis</h2>
+    <p class="measure">This cell has two pairs of homologous chromosomes (2n = 4): a long pair and a short pair. Step through each stage and read what is happening.</p>
+    <p class="note measure" style="margin:0 0 1.2rem"><strong>Note:</strong> you do not need to know the names of the stages, just a general overview of the process.</p>
+    <div class="panel viewer">
+      <div class="viewer-img" id="vImg"></div>
+      <div>
+        <p class="vnum" id="vNum"></p>
+        <h3 id="vName" style="font-size:1.7rem"></h3>
+        <span class="tag" id="vTag" hidden></span>
+        <p id="vText"></p>
+        <p id="vMore" style="color:var(--ink2)"></p>
+        <div class="row">
+          <button class="btn ghost" id="vPrev">Previous stage</button>
+          <button class="btn" id="vNext">Next stage</button>
+        </div>
+        <div class="thumbs" id="vThumbs" aria-label="Jump to a stage"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDER ACTIVITIES -->
+  <section class="sec or" id="order">
+    <h2>Activity 1: Order the pictures</h2>
+    <p class="measure">The nine stages are mixed up. Tap one card, then tap another to swap them (or drag one onto another). When you think they are in order from interphase to telophase II, check your answer. Stage names appear on cards in the right place.</p>
+    <div class="panel" id="sortImg">
+      <ol class="sort-list img"></ol>
+      <div class="row">
+        <button class="btn" data-act="check">Check my order</button>
+        <button class="btn ghost" data-act="shuffle">Shuffle again</button>
+        <button class="btn ghost" data-act="answer">Show the answer</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <h2 style="margin-top:3rem">Activity 2: Order the statements</h2>
+    <p class="measure">Now do it with words only. Put these descriptions in the order they happen. Look for clue words like “pair”, “single file” and “four”.</p>
+    <div class="panel" id="sortTxt">
+      <ol class="sort-list txt"></ol>
+      <div class="row">
+        <button class="btn" data-act="check">Check my order</button>
+        <button class="btn ghost" data-act="shuffle">Shuffle again</button>
+        <button class="btn ghost" data-act="answer">Show the answer</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- SEGREGATION -->
+  <section class="sec yl" id="segregation">
+    <h2>Segregation</h2>
+    <p class="measure">Segregation is the separation of the two alleles of a gene into different gametes. It happens because the homologous chromosomes carrying those alleles are pulled apart in anaphase I. So each gamete ends up with just one allele of every gene.</p>
+    <div class="panel split">
+      <div>
+        <div class="row"><span style="font-weight:700">Parent’s genotype:</span>
+          <div class="seg" id="segG">
+            <button aria-pressed="false" data-g="AA">AA</button>
+            <button aria-pressed="true" data-g="Aa">Aa</button>
+            <button aria-pressed="false" data-g="aa">aa</button>
+          </div>
+        </div>
+        <svg id="segSvg" viewBox="0 0 360 210" class="stage-svg" role="img" aria-label="Segregation of a homologous pair"></svg>
+        <div class="row">
+          <button class="btn ghost" id="segBack">Back</button>
+          <button class="btn" id="segNext">Next step</button>
+        </div>
+      </div>
+      <div>
+        <p class="vnum" id="segStepNum"></p>
+        <p id="segCap"></p>
+        <div class="note">
+          <h3>Predict first</h3>
+          <p id="segQ"></p>
+          <div class="row" id="segOpts"></div>
+          <p class="fb" id="segFb" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDEPENDENT ASSORTMENT -->
+  <section class="sec pk" id="assortment">
+    <h2>Independent assortment</h2>
+    <p class="measure">In metaphase I each homologous pair lines up on the equator. Which way round each pair faces is random, and it does not depend on the other pairs. So the maternal and paternal chromosomes get shuffled into lots of different combinations.</p>
+    <div class="panel split">
+      <div>
+        <div class="row"><span style="font-weight:700">Homologous pairs:</span>
+          <div class="seg" id="iaN">
+            <button aria-pressed="true" data-n="2">2 pairs</button>
+            <button aria-pressed="false" data-n="3">3 pairs</button>
+          </div>
+        </div>
+        <svg id="iaSvg" viewBox="0 0 360 280" class="stage-svg" role="img" aria-label="Homologous pairs lined up at the equator in metaphase I. Select a pair to flip it."></svg>
+        <div class="row">
+          <button class="btn alt" id="iaRand">Line them up randomly</button>
+          <button class="btn ghost" id="iaReset">Reset my discoveries</button>
+        </div>
+      </div>
+      <div>
+        <h3>Tap a pair to flip it</h3>
+        <p>Each pole gets one chromosome from every pair. These are the gametes this line-up makes:</p>
+        <div class="row" id="iaOut"></div>
+        <h3 style="margin-top:1.2rem">Collect every combination</h3>
+        <p id="iaCount" aria-live="polite"></p>
+        <div class="combos" id="iaCombos"></div>
+        <div class="note">
+          <p style="margin:0">The number of combinations is <strong>2<sup>n</sup></strong>, where n is the number of homologous pairs. Humans have 23 pairs, so independent assortment alone gives</p>
+          <p class="big" style="margin:.3rem 0">2<sup>23</sup> = 8,388,608</p>
+          <p style="margin:0">different gametes, before crossing over is even counted.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CROSSING OVER -->
+  <section class="sec or" id="crossing">
+    <h2>Crossing over</h2>
+    <p class="measure">In prophase I, homologous chromosomes pair up tightly. Non-sister chromatids (one maternal, one paternal) can break at the same point and swap sections at a chiasma. This creates recombinant chromatids with new combinations of alleles on the same chromosome.</p>
+    <div class="panel split">
+      <div>
+        <svg id="coSvg" viewBox="0 0 320 290" class="stage-svg" role="img" aria-label="A homologous pair in prophase I. Tap a point to place a crossover."></svg>
+        <label for="coRange" style="font-weight:700">Crossover position</label>
+        <input class="range" type="range" id="coRange" min="19" max="97" value="45">
+        <div class="row">
+          <button class="btn alt" id="coRand">Random crossover</button>
+          <button class="btn ghost" id="coClear">Remove crossover</button>
+        </div>
+      </div>
+      <div>
+        <h3>Tap the chromosomes to place a chiasma</h3>
+        <p id="coText" aria-live="polite"></p>
+        <p style="font-weight:700;margin-bottom:.3rem">The four chromatids, each going to a different gamete:</p>
+        <svg id="coOut" viewBox="0 0 320 150" class="stage-svg" role="img" aria-label="The four chromatids after crossing over"></svg>
+        <div class="note">
+          <h3>Does distance matter?</h3>
+          <p>Genes A and B are close together. Genes A and D are far apart. Run 1,000 meioses with one random crossover each and compare how often each pair of genes ends up recombined.</p>
+          <button class="btn" id="coSim">Run 1,000 meioses</button>
+          <div class="bars">
+            <div><div style="display:flex;justify-content:space-between;font-weight:700"><span>A and B recombined</span><span id="pAB">?</span></div><div class="bar"><span id="barAB"></span></div></div>
+            <div><div style="display:flex;justify-content:space-between;font-weight:700"><span>A and D recombined</span><span id="pAD">?</span></div><div class="bar"><span id="barAD"></span></div></div>
+          </div>
+          <p class="fb" id="simFb" style="font-weight:400;color:var(--ink)"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section class="sec yl" id="summary">
+    <h2>How the three processes compare</h2>
+    <div class="panel">
+      <div class="tbl">
+        <table>
+          <thead><tr><th scope="col">Process</th><th scope="col">When</th><th scope="col">What happens</th><th scope="col">How it adds variation</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Crossing over</th><td>Prophase I</td><td>Non-sister chromatids of a homologous pair swap sections at chiasmata.</td><td>Makes recombinant chromatids with new allele combinations, breaking up linked genes.</td></tr>
+            <tr><th scope="row">Independent assortment</th><td>Metaphase I (sorted in anaphase I)</td><td>Each homologous pair lines up randomly, independently of every other pair.</td><td>Gives 2<sup>n</sup> chromosome combinations: over 8 million in humans.</td></tr>
+            <tr><th scope="row">Segregation</th><td>Anaphase I</td><td>Homologous chromosomes, and so the two alleles of each gene, move to opposite poles.</td><td>Each gamete gets only one allele of each gene, so a heterozygote makes two kinds of gamete in equal numbers.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:1rem">Together these make every gamete genetically unique. Random fertilisation then joins two unique gametes, so in humans one couple could make over 70 trillion (2<sup>23</sup> × 2<sup>23</sup>) chromosome combinations, even without crossing over.</p>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="sec pk" id="quiz">
+    <h2>Check your understanding</h2>
+    <p class="measure">Choose an answer to see if you are right and why.</p>
+    <div class="panel">
+      <div id="quizBox"></div>
+      <div class="row" style="justify-content:space-between">
+        <p class="score" id="score" aria-live="polite" style="margin:0"></p>
+        <button class="btn ghost" id="quizReset">Try the quiz again</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>L2 Meiosis: an interactive guide for Year 12 Biology.</span>
+  </footer>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const MAT="#e2457f",PAT="#f08a24",OUT="rgba(70,25,35,.55)";
+let uid=0;
+
+/* ---------- drawing helpers ---------- */
+function chromatid(cx,cy,len,col,o={}){
+  const w=o.w||9,x=cx-w/2,y=cy-len/2,r=w/2;
+  const body=`x="${x}" y="${y}" width="${w}" height="${len}" rx="${r}"`;
+  let s=`<rect ${body} fill="${col}"/>`;
+  if(o.tip&&o.frac>0){
+    const id="k"+(uid++);
+    s+=`<clipPath id="${id}"><rect ${body}/></clipPath><rect clip-path="url(#${id})" x="${x}" y="${y+len*(1-o.frac)}" width="${w}" height="${len*o.frac}" fill="${o.tip}"/>`;
+  }
+  s+=`<rect x="${x+w*.2}" y="${y+4}" width="${w*.22}" height="${Math.max(len-8,0)}" rx="${w*.11}" fill="#fff" opacity=".35"/>`;
+  s+=`<rect ${body} fill="none" stroke="${OUT}" stroke-width="1"/>`;
+  if(o.alleles)for(const a of o.alleles){
+    const ay=y+len*a.f;
+    s+=`<circle cx="${cx}" cy="${ay}" r="${r+1}" fill="#fffaf0" stroke="${OUT}"/><text x="${cx}" y="${ay}" dy=".36em" text-anchor="middle" class="al">${a.l}</text>`;
+  }
+  return o.rot?`<g transform="rotate(${o.rot} ${cx} ${cy})">${s}</g>`:s;
+}
+function chromosome(cx,cy,len,col,o={}){
+  const w=o.w||9,g=w*.55;
+  let s=chromatid(cx-g,cy,len,col,{w,tip:o.tipL,frac:o.frac,alleles:o.alleles})
+       +chromatid(cx+g,cy,len,col,{w,tip:o.tipR,frac:o.frac,alleles:o.alleles});
+  s+=`<ellipse cx="${cx}" cy="${cy}" rx="${w*1.15}" ry="${w*.42}" fill="#fff1b8" stroke="${OUT}"/>`;
+  return o.rot?`<g transform="rotate(${o.rot} ${cx} ${cy})">${s}</g>`:s;
+}
+const cellE=(cx,cy,rx,ry)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#cellFill)" stroke="#f0a258" stroke-width="2.2" filter="url(#wobble)"/>`;
+const fib=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="fibre"/>`;
+const pole=(x,y)=>`<circle cx="${x}" cy="${y}" r="5" class="pole"/>`;
+const eqV=(x,y1,y2)=>`<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" class="equator"/>`;
+const eqH=(y,x1,x2)=>`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" class="equator"/>`;
+const sv=inner=>`<svg viewBox="0 0 220 180" class="stage-svg" aria-hidden="true">${inner}</svg>`;
+const L=58,S=34,L2=46,S2=28,F=.32;
+
+/* ---------- stages ---------- */
+const STAGES=[
+ {name:"Interphase",tag:"DNA replication",
+  text:"DNA replicates, so each chromosome becomes two identical sister chromatids joined together.",
+  more:"Look for: long, thin chromatin inside the nucleus. You can’t see separate chromosomes yet.",
+  draw:()=>cellE(110,90,96,76)+`<ellipse cx="110" cy="90" rx="50" ry="42" class="nucleus"/>`+
+   `<path d="M78 80 q8-14 18-2 t18 4 t16-6" class="chromatin" stroke="${MAT}"/>`+
+   `<path d="M82 100 q10 12 20 0 t22 2 t14 8" class="chromatin" stroke="${PAT}"/>`+
+   `<path d="M92 68 q6 10 14 4 t14 6" class="chromatin" stroke="${PAT}"/>`+
+   `<path d="M88 114 q8-6 16 2 t16-2" class="chromatin" stroke="${MAT}"/>`},
+ {name:"Prophase I",tag:"Crossing over happens here",
+  text:"Chromosomes condense and homologous chromosomes pair up. Non-sister chromatids cross over at chiasmata and swap sections.",
+  more:"Look for: chromosomes side by side in pairs. The inner chromatids have swapped colours at their ends. That’s crossing over.",
+  draw:()=>cellE(110,90,96,76)+`<ellipse cx="110" cy="90" rx="62" ry="52" class="nucleus dash"/>`+
+   chromosome(84,85,L,MAT,{tipR:PAT,frac:F})+chromosome(104,85,L,PAT,{tipL:MAT,frac:F})+
+   chromosome(140,98,S,MAT)+chromosome(160,98,S,PAT)},
+ {name:"Metaphase I",tag:"Independent assortment happens here",
+  text:"Homologous pairs line up on the equator. Which way each pair faces the poles is random. This is independent assortment.",
+  more:"Look for: pairs sitting either side of the equator. The long pair has pink on the left, but the short pair has orange on the left.",
+  draw:()=>cellE(110,90,98,76)+pole(16,90)+pole(204,90)+
+   fib(16,90,100,62)+fib(16,90,100,122)+fib(204,90,120,62)+fib(204,90,120,122)+eqV(110,18,162)+
+   chromosome(100,62,L,MAT,{tipR:PAT,frac:F})+chromosome(120,62,L,PAT,{tipL:MAT,frac:F})+
+   chromosome(100,122,S,PAT)+chromosome(120,122,S,MAT)},
+ {name:"Anaphase I",tag:"Segregation happens here",
+  text:"Spindle fibres pull the homologous chromosomes of each pair to opposite poles. This is segregation. Sister chromatids stay together.",
+  more:"Look for: whole chromosomes (still with two chromatids) moving apart. Each pole gets one chromosome from each pair.",
+  draw:()=>cellE(110,90,104,64)+pole(8,90)+pole(212,90)+
+   fib(8,90,48,62)+fib(8,90,48,122)+fib(212,90,172,62)+fib(212,90,172,122)+
+   chromosome(48,62,L,MAT,{tipR:PAT,frac:F})+chromosome(48,122,S,PAT)+
+   chromosome(172,62,L,PAT,{tipL:MAT,frac:F})+chromosome(172,122,S,MAT)},
+ {name:"Telophase I",tag:"",
+  text:"The cytoplasm divides, forming two cells. Each chromosome still has two chromatids.",
+  more:"Look for: two cells, each with one long and one short chromosome. Each cell now has one chromosome from each pair.",
+  draw:()=>cellE(57,90,50,64)+cellE(163,90,50,64)+
+   `<ellipse cx="58" cy="90" rx="36" ry="46" class="nucleus dash"/><ellipse cx="164" cy="90" rx="36" ry="46" class="nucleus dash"/>`+
+   chromosome(46,84,L2,MAT,{tipR:PAT,frac:F})+chromosome(72,98,S2,PAT)+
+   chromosome(152,84,L2,PAT,{tipL:MAT,frac:F})+chromosome(178,98,S2,MAT)},
+ {name:"Prophase II",tag:"",
+  text:"In each new cell, the chromosomes condense again and a new spindle forms. There is no DNA replication before this second division.",
+  more:"Look for: spindle poles at the top and bottom of each cell, ready for the second division.",
+  draw:()=>cellE(57,90,50,64)+cellE(163,90,50,64)+pole(57,30)+pole(57,150)+pole(163,30)+pole(163,150)+
+   chromosome(44,86,L2,MAT,{tipR:PAT,frac:F,rot:-20})+chromosome(74,96,S2,PAT,{rot:25})+
+   chromosome(150,86,L2,PAT,{tipL:MAT,frac:F,rot:18})+chromosome(180,96,S2,MAT,{rot:-28})},
+ {name:"Metaphase II",tag:"",
+  text:"Individual chromosomes line up single file on the equator of each cell.",
+  more:"Look for: chromosomes lined up one by one, not in pairs.",
+  draw:()=>cellE(57,90,50,68)+cellE(163,90,50,68)+pole(57,24)+pole(57,156)+pole(163,24)+pole(163,156)+
+   eqH(90,12,102)+eqH(90,118,208)+
+   fib(57,24,36,90)+fib(57,156,36,90)+fib(57,24,82,90)+fib(57,156,82,90)+
+   fib(163,24,142,90)+fib(163,156,142,90)+fib(163,24,188,90)+fib(163,156,188,90)+
+   chromosome(36,90,L2,MAT,{tipR:PAT,frac:F,rot:90})+chromosome(82,90,S2,PAT,{rot:90})+
+   chromosome(142,90,L2,PAT,{tipL:MAT,frac:F,rot:90})+chromosome(188,90,S2,MAT,{rot:90})},
+ {name:"Anaphase II",tag:"",
+  text:"Sister chromatids separate and are pulled to opposite poles.",
+  more:"Look for: single chromatids moving towards the poles.",
+  draw:()=>cellE(57,90,50,80)+cellE(163,90,50,80)+pole(57,14)+pole(57,166)+pole(163,14)+pole(163,166)+
+   fib(57,14,38,46)+fib(57,14,84,46)+fib(57,166,38,134)+fib(57,166,84,134)+
+   fib(163,14,144,46)+fib(163,14,190,46)+fib(163,166,144,134)+fib(163,166,190,134)+
+   chromatid(38,46,L2,MAT,{rot:90})+chromatid(84,46,S2,PAT,{rot:90})+
+   chromatid(38,134,L2,MAT,{tip:PAT,frac:F,rot:90})+chromatid(84,134,S2,PAT,{rot:90})+
+   chromatid(144,46,L2,PAT,{tip:MAT,frac:F,rot:90})+chromatid(190,46,S2,MAT,{rot:90})+
+   chromatid(144,134,L2,PAT,{rot:90})+chromatid(190,134,S2,MAT,{rot:90})},
+ {name:"Telophase II",tag:"Four unique gametes",
+  text:"The cytoplasm divides again, giving four haploid cells. Each gamete is genetically different.",
+  more:"Look for: four cells, each with a different mix of colours. No two gametes match.",
+  draw:()=>cellE(55,46,48,38)+cellE(55,134,48,38)+cellE(165,46,48,38)+cellE(165,134,48,38)+
+   chromatid(55,38,L2,MAT,{rot:90})+chromatid(55,58,S2,PAT,{rot:90})+
+   chromatid(55,126,L2,MAT,{tip:PAT,frac:F,rot:90})+chromatid(55,146,S2,PAT,{rot:90})+
+   chromatid(165,38,L2,PAT,{tip:MAT,frac:F,rot:90})+chromatid(165,58,S2,MAT,{rot:90})+
+   chromatid(165,126,L2,PAT,{rot:90})+chromatid(165,146,S2,MAT,{rot:90})}
+];
+
+/* hero */
+$("#heroSvg").innerHTML=`<g transform="translate(0,5)">${STAGES[1].draw()}</g>`+
+ `<path d="M228 96 C 250 80, 270 112, 292 94" fill="none" stroke="#e8558a" stroke-width="4" stroke-linecap="round"/>`+
+ `<path d="M282 84 L294 94 L281 103" fill="none" stroke="#e8558a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`+
+ `<g transform="translate(300,5)">${STAGES[8].draw()}</g>`;
+
+/* ---------- stage viewer ---------- */
+let vi=0;
+const thumbs=$("#vThumbs");
+thumbs.innerHTML=STAGES.map((s,i)=>`<button class="thumb" data-i="${i}" aria-label="${s.name}" title="${s.name}">${i+1}</button>`).join("");
+function viewer(){
+  const st=STAGES[vi];
+  $("#vImg").innerHTML=`<div class="pop">${sv(st.draw())}</div>`;
+  $("#vNum").textContent=`Stage ${vi+1} of ${STAGES.length}`;
+  $("#vName").textContent=st.name;
+  $("#vText").textContent=st.text;
+  $("#vMore").textContent=st.more;
+  const t=$("#vTag"); t.hidden=!st.tag; t.textContent=st.tag;
+  thumbs.querySelectorAll(".thumb").forEach((b,i)=>b.setAttribute("aria-current",i===vi));
+  $("#vPrev").disabled=vi===0; $("#vNext").disabled=vi===STAGES.length-1;
+}
+$("#vPrev").onclick=()=>{if(vi>0){vi--;viewer()}};
+$("#vNext").onclick=()=>{if(vi<STAGES.length-1){vi++;viewer()}};
+thumbs.onclick=e=>{const b=e.target.closest(".thumb");if(b){vi=+b.dataset.i;viewer()}};
+viewer();
+
+/* ---------- sorters ---------- */
+function shuffled(n){
+  let a;
+  do{a=[...Array(n).keys()];for(let i=n-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+  while(a.filter((v,i)=>v===i).length>2);
+  return a;
+}
+function makeSorter(rootSel,kind){
+  const root=$(rootSel),list=root.querySelector(".sort-list"),fb=root.querySelector(".fb");
+  let order=shuffled(STAGES.length),sel=null,marks=null,dragFrom=null;
+  function render(){
+    list.innerHTML=order.map((si,pos)=>{
+      const st=STAGES[si];
+      const cls=["sort-card",kind,sel===pos?"sel":"",marks?(marks[pos]?"ok":"no"):""].join(" ");
+      const label=kind==="img"?`Card in position ${pos+1}`:`Position ${pos+1}: ${st.text}`;
+      const inner=kind==="img"
+        ?`${sv(st.draw())}<span class="nm">${marks&&marks[pos]?st.name:"&nbsp;"}</span>`
+        :`<p>${st.text}</p>`;
+      return `<li class="${cls}" draggable="true" tabindex="0" role="button" aria-pressed="${sel===pos}" aria-label="${label}" data-pos="${pos}"><span class="pos">${pos+1}</span>${inner}</li>`;
+    }).join("");
+  }
+  function pick(pos){
+    if(sel===null){sel=pos;render();list.querySelector(`[data-pos="${pos}"]`).focus();return}
+    if(sel!==pos){[order[sel],order[pos]]=[order[pos],order[sel]];marks=null;fb.textContent="";fb.className="fb"}
+    sel=null;render();list.querySelector(`[data-pos="${pos}"]`).focus();
+  }
+  list.addEventListener("click",e=>{const li=e.target.closest(".sort-card");if(li)pick(+li.dataset.pos)});
+  list.addEventListener("keydown",e=>{const li=e.target.closest(".sort-card");if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pick(+li.dataset.pos)}});
+  list.addEventListener("dragstart",e=>{const li=e.target.closest(".sort-card");if(!li)return;dragFrom=+li.dataset.pos;e.dataTransfer.effectAllowed="move";try{e.dataTransfer.setData("text/plain",String(dragFrom))}catch(_){}});
+  list.addEventListener("dragover",e=>{const li=e.target.closest(".sort-card");if(li){e.preventDefault();list.querySelectorAll(".over").forEach(x=>x.classList.remove("over"));li.classList.add("over")}});
+  list.addEventListener("dragleave",e=>{const li=e.target.closest(".sort-card");if(li&&!li.contains(e.relatedTarget))li.classList.remove("over")});
+  list.addEventListener("drop",e=>{const li=e.target.closest(".sort-card");if(!li||dragFrom===null)return;e.preventDefault();const to=+li.dataset.pos;
+    if(to!==dragFrom){[order[dragFrom],order[to]]=[order[to],order[dragFrom]];marks=null;fb.textContent="";fb.className="fb"}
+    dragFrom=null;sel=null;render()});
+  list.addEventListener("dragend",()=>{dragFrom=null;list.querySelectorAll(".over").forEach(x=>x.classList.remove("over"))});
+  root.querySelector('[data-act="check"]').onclick=()=>{
+    marks=order.map((v,i)=>v===i);sel=null;render();
+    const n=marks.filter(Boolean).length;
+    if(n===STAGES.length){fb.className="fb good";fb.textContent="All nine stages are in the right order. Well done!"}
+    else{fb.className="fb bad";fb.textContent=`${n} of ${STAGES.length} are in the right place. Swap the red cards and check again.`}
+  };
+  root.querySelector('[data-act="shuffle"]').onclick=()=>{order=shuffled(STAGES.length);sel=null;marks=null;fb.textContent="";fb.className="fb";render()};
+  root.querySelector('[data-act="answer"]').onclick=()=>{order=[...STAGES.keys()];sel=null;marks=order.map(()=>true);fb.className="fb good";fb.textContent="Here is the correct order. Shuffle and try again from memory.";render()};
+  render();
+}
+makeSorter("#sortImg","img");
+makeSorter("#sortTxt","txt");
+
+/* ---------- segregation ---------- */
+const seg={g:"Aa",step:0,answered:false};
+const segCaps=[
+  (m,p)=>`Metaphase I. The homologous pair lines up on the equator. The maternal chromosome carries allele ${m} and the paternal chromosome carries allele ${p}. After DNA replication, both sister chromatids carry the same allele.`,
+  (m,p)=>`Anaphase I and telophase I. The homologous chromosomes are pulled to opposite poles. This is segregation: allele ${m} and allele ${p} end up in different cells.`,
+  (m,p)=>{
+    const c={};[m,m,p,p].forEach(x=>c[x]=(c[x]||0)+1);
+    const parts=Object.entries(c).map(([k,v])=>`${v} carry ${k}`).join(" and ");
+    return `Telophase II. Sister chromatids separate, giving four gametes. Each has only one allele for this gene: ${parts}.`+(m!==p?` That’s a 1 : 1 ratio, or half of the gametes each.`:` A homozygous parent can only make one kind of gamete for this gene.`);
+  }
+];
+function segDraw(){
+  const m=seg.g[0],p=seg.g[1],al=l=>[{f:.74,l}];let s="";
+  if(seg.step===0){
+    s=cellE(180,105,152,92)+eqV(180,18,192)+pole(34,105)+pole(326,105)+fib(34,105,164,105)+fib(326,105,196,105)+
+      chromosome(164,105,112,MAT,{w:14,alleles:al(m)})+chromosome(196,105,112,PAT,{w:14,alleles:al(p)});
+  }else if(seg.step===1){
+    s=cellE(92,105,82,92)+cellE(268,105,82,92)+
+      chromosome(92,105,112,MAT,{w:14,alleles:al(m)})+chromosome(268,105,112,PAT,{w:14,alleles:al(p)});
+  }else{
+    [[46,MAT,m],[134,MAT,m],[226,PAT,p],[314,PAT,p]].forEach(([x,c,l])=>{
+      s+=cellE(x,100,40,56)+chromatid(x,100,72,c,{w:14,alleles:[{f:.74,l}]})+`<text x="${x}" y="200" text-anchor="middle" class="lbl">gamete</text>`;
+    });
+  }
+  $("#segSvg").innerHTML=`<g class="pop">${s}</g>`;
+  $("#segCap").textContent=segCaps[seg.step](m,p);
+  $("#segStepNum").textContent=`Step ${seg.step+1} of 3`;
+  $("#segBack").disabled=seg.step===0;$("#segNext").disabled=seg.step===2;
+}
+function segQuestion(){
+  seg.answered=false;
+  $("#segQ").textContent=`This parent is ${seg.g}. What fraction of their gametes will carry allele a?`;
+  const correct={AA:"None",Aa:"Half",aa:"All"}[seg.g];
+  $("#segOpts").innerHTML=["None","A quarter","Half","All"].map(o=>`<button class="btn ghost" data-o="${o}">${o}</button>`).join("");
+  $("#segFb").textContent="";$("#segFb").className="fb";
+  $("#segOpts").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+    const ok=b.dataset.o===correct;
+    $("#segFb").className="fb "+(ok?"good":"bad");
+    $("#segFb").textContent=ok?`Yes. ${correct==="Half"?"Each gamete gets one of the two alleles, so half carry a.":correct==="All"?"Both chromosomes carry a, so every gamete gets a.":"Neither chromosome carries a, so no gamete can."} Step through to check.`
+      :"Not quite. Remember each gamete gets just one chromosome from the pair. Step through to see why.";
+  };
+}
+$("#segG").onclick=e=>{const b=e.target.closest("button");if(!b)return;
+  seg.g=b.dataset.g;seg.step=0;$("#segG").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));segDraw();segQuestion()};
+$("#segNext").onclick=()=>{if(seg.step<2){seg.step++;segDraw()}};
+$("#segBack").onclick=()=>{if(seg.step>0){seg.step--;segDraw()}};
+segDraw();segQuestion();
+
+/* ---------- independent assortment ---------- */
+const GENES=[{M:"A",P:"a",len:100},{M:"B",P:"b",len:76},{M:"D",P:"d",len:56}];
+const ia={n:2,flip:[false,false,false],found:new Set(),anim:[]};
+const bubble=(l,isP)=>`<span class="b ${isP?"p":"m"}">${l}</span>`;
+function iaGametes(){
+  const g1=[],g2=[];
+  for(let i=0;i<ia.n;i++){const G=GENES[i],f=ia.flip[i];g1.push({l:f?G.P:G.M,p:f});g2.push({l:f?G.M:G.P,p:!f})}
+  return [g1,g2];
+}
+function iaDraw(){
+  const n=ia.n,H=40+n*120,mid=H/2;
+  const svg=$("#iaSvg");svg.setAttribute("viewBox",`0 0 360 ${H}`);
+  let s=cellE(180,mid,166,mid-8)+eqV(180,14,H-14)+pole(24,mid)+pole(336,mid)+
+    `<text x="24" y="${mid-14}" text-anchor="middle" class="lbl">Pole 1</text><text x="336" y="${mid-14}" text-anchor="middle" class="lbl">Pole 2</text>`;
+  for(let i=0;i<n;i++){
+    const G=GENES[i],cy=80+i*120,f=ia.flip[i];
+    const lc=f?PAT:MAT,rc=f?MAT:PAT,ll=f?G.P:G.M,rl=f?G.M:G.P;
+    s+=fib(24,mid,164,cy)+fib(336,mid,196,cy);
+    s+=`<g class="pair${ia.anim.includes(i)?" flipped":""}" data-i="${i}" tabindex="0" role="button" aria-label="Pair ${i+1}: ${ll} faces pole 1, ${rl} faces pole 2. Press to flip.">`+
+       `<rect x="138" y="${cy-G.len/2-10}" width="84" height="${G.len+20}" rx="18" class="pair-hit"/>`+
+       chromosome(164,cy,G.len,lc,{w:14,alleles:[{f:.76,l:ll}]})+chromosome(196,cy,G.len,rc,{w:14,alleles:[{f:.76,l:rl}]})+`</g>`;
+  }
+  svg.innerHTML=s;ia.anim=[];
+  const [g1,g2]=iaGametes();
+  ia.found.add(g1.map(x=>x.l).join(""));ia.found.add(g2.map(x=>x.l).join(""));
+  $("#iaOut").innerHTML=[g1,g2].map((g,k)=>`<span class="gam"><span style="padding:0 .3rem;font-weight:700">Pole ${k+1}</span>${g.map(x=>bubble(x.l,x.p)).join("")}</span>`).join("");
+  const total=2**n;let combos=[];
+  for(let mask=0;mask<total;mask++){
+    const parts=[];for(let i=0;i<n;i++){const isP=!!(mask>>i&1);parts.push({l:isP?GENES[i].P:GENES[i].M,p:isP})}
+    const key=parts.map(x=>x.l).join("");
+    combos.push(`<span class="gam combo${ia.found.has(key)?" lit":""}" title="${key}">${parts.map(x=>bubble(x.l,x.p)).join("")}</span>`);
+  }
+  $("#iaCombos").innerHTML=combos.join("");
+  const k=ia.found.size;
+  $("#iaCount").innerHTML=k===total
+    ?`<strong style="color:var(--good)">You found all ${total} combinations!</strong> With ${n} pairs there are 2<sup>${n}</sup> = ${total}.${n===2?" Now try 3 pairs.":""}`
+    :`You have found <strong>${k} of ${total}</strong> possible combinations. Flip pairs to find the rest.`;
+}
+$("#iaSvg").addEventListener("click",e=>{const g=e.target.closest(".pair");if(!g)return;const i=+g.dataset.i;ia.flip[i]=!ia.flip[i];ia.anim=[i];iaDraw();$(`#iaSvg .pair[data-i="${i}"]`).focus()});
+$("#iaSvg").addEventListener("keydown",e=>{const g=e.target.closest(".pair");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();g.dispatchEvent(new MouseEvent("click",{bubbles:true}))}});
+$("#iaRand").onclick=()=>{ia.anim=[];for(let i=0;i<ia.n;i++){const f=Math.random()<.5;if(f!==ia.flip[i])ia.anim.push(i);ia.flip[i]=f}iaDraw()};
+$("#iaReset").onclick=()=>{ia.found.clear();iaDraw()};
+$("#iaN").onclick=e=>{const b=e.target.closest("button");if(!b)return;ia.n=+b.dataset.n;ia.found.clear();ia.flip=[false,false,false];
+  $("#iaN").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));iaDraw()};
+iaDraw();
+
+/* ---------- crossing over ---------- */
+const CO={TOP:34,LEN:232,CEN:.14,X:[124,142,178,196],LOCI:[{f:.36,M:"A",P:"a"},{f:.53,M:"B",P:"b"},{f:.86,M:"D",P:"d"}]};
+let cp=null;
+function coChromatids(){
+  const mk=(base,other,swap)=>{
+    const al=CO.LOCI.map(l=>({f:l.f,l:(swap&&cp!==null&&l.f>cp)?l[other]:l[base]}));
+    return {col:base==="M"?MAT:PAT,tip:swap&&cp!==null?(base==="M"?PAT:MAT):null,frac:cp!==null?1-cp:0,alleles:al,combo:al.map(a=>a.l).join("")};
+  };
+  return [mk("M","P",false),mk("M","P",true),mk("P","M",true),mk("P","M",false)];
+}
+function coDraw(){
+  const {TOP,LEN,CEN,X}=CO,cy=TOP+LEN/2,ch=coChromatids(),cyC=TOP+LEN*CEN;
+  let s=`<text x="133" y="22" class="lbl" text-anchor="middle">Maternal</text><text x="187" y="22" class="lbl" text-anchor="middle">Paternal</text>`;
+  CO.LOCI.forEach(l=>s+=`<text x="104" y="${TOP+LEN*l.f}" dy=".35em" text-anchor="end" class="lbl">gene ${l.M}</text>`);
+  ch.forEach((c,i)=>s+=chromatid(X[i],cy,LEN,c.col,{w:14,tip:c.tip,frac:c.frac,alleles:c.alleles}));
+  s+=`<ellipse cx="133" cy="${cyC}" rx="16" ry="6" fill="#fff1b8" stroke="${OUT}"/><ellipse cx="187" cy="${cyC}" rx="16" ry="6" fill="#fff1b8" stroke="${OUT}"/>`;
+  if(cp!==null){const y=TOP+LEN*cp;s+=`<line x1="108" x2="214" y1="${y}" y2="${y}" class="cutline"/><path d="M150 ${y-9} L170 ${y+9} M150 ${y+9} L170 ${y-9}" class="chiasma"/><text x="218" y="${y}" dy=".35em" class="lbl">chiasma</text>`}
+  s+=`<rect x="108" y="${cyC+8}" width="106" height="${TOP+LEN-cyC-8}" fill="transparent" class="hit"/>`;
+  $("#coSvg").innerHTML=s;
+  /* outcome strip */
+  let o="";const xs=[46,122,198,274];
+  ch.forEach((c,i)=>{
+    const rec=!["ABD","abd"].includes(c.combo);
+    o+=chromatid(xs[i],62,108,c.col,{w:14,tip:c.tip,frac:c.frac,alleles:c.alleles.map(a=>({f:a.f,l:a.l}))});
+    o+=`<text x="${xs[i]}" y="136" text-anchor="middle" class="lbl${rec?" rec":""}">${rec?"Recombinant":"Parental"}</text>`;
+  });
+  $("#coOut").innerHTML=o;
+  /* explanation */
+  const t=$("#coText");
+  if(cp===null){t.innerHTML="There is no crossover yet, so the alleles stay in their original groups. Gametes can only get <strong>ABD</strong> or <strong>abd</strong> from this pair.";return}
+  const r1=ch[1].combo,r2=ch[2].combo;
+  if(cp<CO.LOCI[0].f)t.innerHTML=`The crossover is above all three genes, so the whole set of alleles swapped together. The chromatids still carry <strong>ABD</strong> and <strong>abd</strong>, so no new combinations of these genes are made.`;
+  else if(cp>CO.LOCI[2].f)t.innerHTML=`The crossover is below gene D, so A, B and D still travel together. DNA was swapped, but not between these three genes.`;
+  else{const between=cp<CO.LOCI[1].f?"A and B":"B and D";
+    t.innerHTML=`The crossover is between genes ${between}. Two chromatids are now recombinant: <strong>${r1}</strong> and <strong>${r2}</strong>. These allele combinations didn’t exist in either parent’s chromosomes.`}
+}
+function setCp(v){cp=Math.min(.97,Math.max(CO.CEN+.05,v));$("#coRange").value=Math.round(cp*100);coDraw()}
+$("#coSvg").addEventListener("click",e=>{
+  if(!e.target.classList.contains("hit"))return;
+  const svg=$("#coSvg"),pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
+  const p=pt.matrixTransform(svg.getScreenCTM().inverse());setCp((p.y-CO.TOP)/CO.LEN);
+});
+$("#coRange").oninput=e=>setCp(+e.target.value/100);
+$("#coRand").onclick=()=>setCp(.19+Math.random()*.78);
+$("#coClear").onclick=()=>{cp=null;coDraw()};
+$("#coSim").onclick=()=>{
+  let ab=0,ad=0;const N=1000;
+  for(let i=0;i<N;i++){const c=.19+Math.random()*.78;if(c>.36&&c<.53)ab+=2;if(c>.36&&c<.86)ad+=2}
+  const pAB=ab/(4*N)*100,pAD=ad/(4*N)*100;
+  $("#pAB").textContent=pAB.toFixed(1)+"%";$("#pAD").textContent=pAD.toFixed(1)+"%";
+  $("#barAB").style.width=(pAB*2)+"%";$("#barAD").style.width=(pAD*2)+"%";
+  $("#simFb").textContent=`Genes far apart (A and D) were recombined about ${(pAD/pAB).toFixed(1)} times as often as genes close together (A and B). The further apart two genes are, the more likely a crossover falls between them. Genes very close together are linked: they are usually inherited together.`;
+};
+coDraw();
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"In which stage does crossing over happen?",o:["Interphase","Prophase I","Metaphase I","Anaphase II"],a:1,why:"Homologous chromosomes pair up in prophase I, letting non-sister chromatids swap sections at chiasmata."},
+ {q:"What causes independent assortment?",o:["DNA replication in interphase","Sister chromatids separating in anaphase II","Random orientation of homologous pairs on the equator in metaphase I","The cytoplasm dividing in telophase I"],a:2,why:"Each pair lines up randomly and independently of the others, so maternal and paternal chromosomes are shuffled into new combinations."},
+ {q:"Which statement best describes segregation?",o:["The two alleles of a gene separate into different gametes","Chromatids swap sections of DNA","Chromosomes condense and become visible","Two gametes join at fertilisation"],a:0,why:"Homologous chromosomes move to opposite poles in anaphase I, so each gamete gets only one allele of each gene."},
+ {q:"Crossing over happens between…",o:["sister chromatids of the same chromosome","non-homologous chromosomes","non-sister chromatids of homologous chromosomes","chromatids in different cells"],a:2,why:"Swapping between identical sister chromatids would change nothing. Swapping between maternal and paternal chromatids makes new allele combinations."},
+ {q:"In which stage do sister chromatids separate?",o:["Anaphase I","Anaphase II","Prophase II","Telophase I"],a:1,why:"In anaphase I whole homologous chromosomes separate. Sister chromatids only separate in anaphase II, when centromeres split."},
+ {q:"A parent is heterozygous Bb. What proportion of their gametes will carry b?",o:["None","A quarter","Half","All"],a:2,why:"Segregation puts B and b into different gametes in equal numbers, a 1 : 1 ratio."},
+ {q:"Genes A and B are very close together on the same chromosome. Compared with genes far apart, they are…",o:["more likely to be separated by crossing over","less likely to be separated by crossing over","always on different chromosomes","never inherited together"],a:1,why:"A crossover is less likely to fall in the small gap between them, so linked genes close together tend to be inherited together."},
+ {q:"Why are the four gametes made by one meiosis genetically different from each other?",o:["Mutations happen in every gamete","Crossing over and independent assortment create new allele combinations","Each gamete is made by mitosis","Fertilisation mixes the chromosomes"],a:1,why:"Crossing over makes recombinant chromatids, and independent assortment shuffles whole chromosomes. Fertilisation happens later."}
+];
+let score=0,done=0;
+function quiz(){
+  score=0;done=0;
+  $("#quizBox").innerHTML=QUIZ.map((x,i)=>`<div class="q" data-q="${i}"><h3>${i+1}. ${x.q}</h3><div class="opts">${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}</div><p class="why" hidden></p></div>`).join("");
+  updScore();
+}
+function updScore(){$("#score").textContent=done===QUIZ.length?`You scored ${score} out of ${QUIZ.length}. ${score===QUIZ.length?"Perfect!":score>=6?"Great work.":"Review the sections above and try again."}`:`Score: ${score} / ${done} answered`}
+$("#quizBox").onclick=e=>{
+  const b=e.target.closest(".opt");if(!b)return;
+  const qd=b.closest(".q"),x=QUIZ[+qd.dataset.q],j=+b.dataset.j;
+  qd.querySelectorAll(".opt").forEach((o,k)=>{o.disabled=true;if(k===x.a)o.classList.add("right")});
+  if(j!==x.a)b.classList.add("wrong");else score++;
+  done++;
+  const w=qd.querySelector(".why");w.hidden=false;w.innerHTML=`<strong style="color:${j===x.a?"var(--good)":"var(--bad)"}">${j===x.a?"Correct.":"Not quite."}</strong> ${x.why}`;
+  updScore();
+};
+$("#quizReset").onclick=quiz;
+quiz();
+</script>
+</body>
+</html>
